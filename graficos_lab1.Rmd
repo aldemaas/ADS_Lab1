@@ -1,0 +1,140 @@
+
+```{r}
+library(readr)
+library(tidyverse)
+
+# Lista completa dos arquivos
+dados_threads <- c(
+  "results_questao1/measurements-mn110000-nt12-st1734383135916.txt",
+  "results_questao1/measurements-mn110000-nt4-st1734383198689.txt",
+  "results_questao1/measurements-mn110000-nt8-st1734383207064.txt",
+  "results_questao1/measurements-mn110000-nt20-st1734383252359.txt",
+  "results_questao1/measurements-mn110000-nt30-st1734383263625.txt",
+  "results_questao1/measurements-mn110000-nt40-st1734383289099.txt",
+  "results_questao1/measurements-mn110000-nt50-st1734383297180.txt",
+  "results_questao1/measurements-mn110000-nt80-st1734383308327.txt",
+  "results_questao1/measurements-mn110000-nt100-st1734383317025.txt"
+)
+
+# Função para ler os arquivos usando read.delim
+ler_arquivo <- function(caminho) {
+  read.delim(caminho, header = TRUE, sep = "\t")
+}
+
+# Combinar todos os arquivos em um único dataframe
+dados_combinados <- do.call(rbind, lapply(dados_threads, ler_arquivo))
+
+# Exibir o resultado
+print(dados_combinados)
+
+```
+```{r}
+dados_combinados_ordenados <-
+  dados_combinados |> 
+  arrange(NumThreads)
+
+dados_combinados_ordenados
+```
+
+```{r}
+ggplot(
+  dados_combinados_ordenados,
+  aes(x = NumThreads, y = MeanUtilization)) +
+  geom_point() +
+  geom_line(color = "blue") +
+  scale_y_continuous(limits = c(0, 1), breaks = (seq(0, 1, by = 0.25)))+
+  scale_x_continuous(breaks = unique(dados_combinados$NumThreads))
+```
+```{r}
+ggplot(
+  dados_combinados_ordenados,
+  aes(x = NumThreads, y = ElapsedTime)) +
+  geom_point() +
+  geom_line(color = "blue") +
+  scale_x_continuous(breaks = unique(dados_combinados_ordenados$NumThreads)) +
+  scale_y_continuous(limits = c(0, 3000),breaks = (seq(0,3000, by = 500)))
+  
+```
+```{r}
+
+dados_threads <- c(
+  "results_questao2/measurements-mn800000-nt12-st1734385674990.txt",
+  "results_questao2/measurements-mn700000-nt12-st1734385586208.txt",
+  "results_questao2/measurements-mn600000-nt12-st1734385497054.txt",
+  "results_questao2/measurements-mn500000-nt12-st1734385372067.txt",
+  "results_questao2/measurements-mn400000-nt12-st1734385256227.txt",
+  "results_questao2/measurements-mn300000-nt12-st1734385194445.txt",
+  "results_questao2/measurements-mn200000-nt12-st1734385119780.txt",
+  "results_questao2/measurements-mn100000-nt12-st1734384872930.txt"
+)
+
+ler_arquivo <- function(caminho) {
+  read.delim(caminho, header = TRUE, sep = "\t")
+}
+
+dados_combinados2 <- do.call(rbind, lapply(dados_threads, ler_arquivo))
+
+print(dados_combinados2)
+
+```
+```{r}
+ggplot(
+  dados_combinados2,
+  aes(x = NumeroMaximo, y = ElapsedTime)
+) +
+  geom_point() +
+  geom_line(aes(group = 1), color = "blue") +
+  scale_y_continuous(limits = c(0, 105000),
+                     breaks = seq(0, 105000, by = 25000))+
+  scale_x_continuous(breaks = unique(dados_combinados2$NumeroMaximo), 
+                     labels = scales:: comma)
+```
+```{r}
+# Carregar pacotes necessários
+library(readr)
+library(dplyr)
+
+# Lista completa de arquivos com o caminho "results_memoria/"
+arquivos <- c(
+  "results_memoria/measurement-kb10-rep110000000-st1734488001692.txt",
+  "results_memoria/measurement-kb50-rep110000000-st1734488021683.txt",
+  "results_memoria/measurement-kb500-rep110000000-st1734488031356.txt",
+  "results_memoria/measurement-kb1024-rep110000000-st1734487621840.txt",
+  "results_memoria/measurement-kb5000-rep110000000-st1734488077877.txt",
+  "results_memoria/measurement-kb10000-rep110000000-st1734488095171.txt",
+  "results_memoria/measurement-kb25000-rep110000000-st1734488106746.txt",
+  "results_memoria/measurement-kb50000-rep110000000-st1734488243864.txt",
+  "results_memoria/measurement-kb100000-rep110000000-st1734488253085.txt"
+)
+
+# Função para ler os arquivos
+ler_arquivo <- function(caminho) {
+  read.delim(caminho, header = TRUE, sep = "\t")
+}
+
+# Ler e combinar os arquivos em um único dataframe
+dados_memoria <- bind_rows(lapply(arquivos, ler_arquivo))
+
+# Exibir os dados combinados
+print(dados_memoria)
+
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(
+  dados_memoria,
+  aes(x = as.factor(KBinMemory), y = SearchTime)
+) +
+  geom_point() +
+  geom_line(aes(group = 1), color = "blue") +
+  scale_x_discrete(guide = guide_axis()) + # Organiza os rótulos em mais linhas
+  scale_y_continuous(
+    limits = c(0, 5000),
+    breaks = seq(0, 5000, by = 1000),
+    labels = scales::comma
+  ) 
+
+```
+
