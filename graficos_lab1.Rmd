@@ -3,7 +3,6 @@
 library(readr)
 library(tidyverse)
 
-# Lista completa dos arquivos
 dados_threads <- c(
   "results_questao1/measurements-mn110000-nt12-st1734383135916.txt",
   "results_questao1/measurements-mn110000-nt4-st1734383198689.txt",
@@ -16,15 +15,12 @@ dados_threads <- c(
   "results_questao1/measurements-mn110000-nt100-st1734383317025.txt"
 )
 
-# Função para ler os arquivos usando read.delim
 ler_arquivo <- function(caminho) {
   read.delim(caminho, header = TRUE, sep = "\t")
 }
 
-# Combinar todos os arquivos em um único dataframe
 dados_combinados <- do.call(rbind, lapply(dados_threads, ler_arquivo))
 
-# Exibir o resultado
 print(dados_combinados)
 
 ```
@@ -90,11 +86,10 @@ ggplot(
                      labels = scales:: comma)
 ```
 ```{r}
-# Carregar pacotes necessários
+
 library(readr)
 library(dplyr)
 
-# Lista completa de arquivos com o caminho "results_memoria/"
 arquivos <- c(
   "results_memoria/measurement-kb10-rep110000000-st1734488001692.txt",
   "results_memoria/measurement-kb50-rep110000000-st1734488021683.txt",
@@ -107,15 +102,12 @@ arquivos <- c(
   "results_memoria/measurement-kb100000-rep110000000-st1734488253085.txt"
 )
 
-# Função para ler os arquivos
 ler_arquivo <- function(caminho) {
   read.delim(caminho, header = TRUE, sep = "\t")
 }
 
-# Ler e combinar os arquivos em um único dataframe
 dados_memoria <- bind_rows(lapply(arquivos, ler_arquivo))
 
-# Exibir os dados combinados
 print(dados_memoria)
 
 ```
